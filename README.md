@@ -31,7 +31,7 @@ to install those packages:
   run
   
 ```
-  ./tileCreate.py
+  python ./tileCreate.py
 ```
 
 ## Options
@@ -40,7 +40,7 @@ There is a "frames" flag if you need to generate more than 2 tiles
 Simply stick your additional tiles to your entry.png
 
 ```
-  ./tileCreate.py --frames {number of additional frames}
+  python ./tileCreate.py --frames {number of additional frames}
 ```
 
 
