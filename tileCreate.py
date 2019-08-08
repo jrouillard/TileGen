@@ -208,6 +208,7 @@ def treatImage(path, bg, frames):
     background = Image.open(bg)
     imgwidth, imgheight = im.size
     factor = 3
+
     if (imgheight * 4 * frames != imgwidth):
         print('Error, not a good ratio')
         return
@@ -220,9 +221,9 @@ def treatImage(path, bg, frames):
     for index in range(0,frames*2,2):
         w = int(imgwidth/(2 * frames))
         imleft = imcopy.crop((index * w, 0, (index + 1) * w, imgheight))
-        imleft.save('debug/debug_left_' + str(index) + '.png')
+        # imleft.save('debug/debug_left_' + str(index) + '.png')
         imright = imcopy.crop(((index + 1) * w, 0, (index + 2) * w, imgheight))
-        imright.save('debug/debug_right_' + str(index) + '.png')
+        # imright.save('debug/debug_right_' + str(index) + '.png')
         framesList.append(treatFrame(index, factor, background, imleft, imright))
     saveResult(framesList)
 
@@ -248,10 +249,6 @@ def fixPixels(image, control):
                     continue
                 if (pix[x, y][3] != 0):
                     pix[px[0], px[1]] = pix[x, y]
-                    fixed = True
-                    break
-            if (fixed):
-                break
 
     return image
 
@@ -264,7 +261,7 @@ def saveResult(frames):
         for i, img in enumerate(frame):
             resultFinal.paste(img, (index * imgwidth, 1 + i*(imgheight + 1)), img)
 
-    resultFinal.save("final.png")
+    resultFinal.save("atlas.png")
 
 def createSquare(squares, size, positionsbbox, factor):
     result = Image.new('RGBA', size)
@@ -327,4 +324,11 @@ def pasteBackground(img, background):
     bgcopy.paste(img, (0,0), img)
     return bgcopy
 
-treatImage("entry.png", "background.png", 3)
+
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--frames", default=1, help="number of frames")
+    args = parser.parse_args()
+    treatImage("entry.png", "background.png", int(args.frames))
