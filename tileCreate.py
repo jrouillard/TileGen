@@ -2,28 +2,18 @@
 import argparse
 import math
 from PIL import Image, ImageDraw
-import subprocess
 import numpy as np
 
 import math
 
-def treatImage(path, bg):
-    im = Image.open(path)
-    background = Image.open(bg)
-    imgwidth, imgheight = im.size
-    factor = 3
-    if (imgheight * 4 != imgwidth):
-        print('Error, width is not 4 times height')
-        return
 
+def treatFrame(id, factor, background, imleft, imright):
 
-    imcopy = im.copy()
-    imright = imcopy.crop((imgwidth/2, 0, imgwidth, imgheight))
-    imleft = imcopy.crop((0, 0, imgwidth/2, imgheight))
+    imgleftwidth, imgleftheight = imleft.size
     control = imleft.copy()
-    imleft = imleft.resize((int(imgwidth/2 * factor), imgheight * factor),resample=0 )
-    imright = imright.resize((int(imgwidth/2 * factor), imgheight * factor),resample=0 )
-    imcropwidth, imcropheight = imright.size
+    imleft = imleft.resize((imgleftwidth * factor, imgleftheight * factor), resample=0)
+    imright = imright.resize((imgleftwidth* factor, imgleftheight * factor), resample=0)
+    imcropwidth, imcropheight = imleft.size
     size = (imcropwidth, imcropheight)
     debug = imleft.copy()
 
@@ -206,18 +196,41 @@ def treatImage(path, bg):
         [ls5, ls5, ls5, ls5, ls5, ls5, ls5, ls5, ls5],
         [ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9],
     ]
-
     debug.save("debug.png")
     resultImgs = []
     for direction in allDirections:
         resultImgs.append(pasteBackground(fixPixels(createSquare(direction, size, positionsbbox, factor), control), background))
 
-    saveResult(resultImgs, size[0])
+    return resultImgs
+
+def treatImage(path, bg, frames):
+    im = Image.open(path)
+    background = Image.open(bg)
+    imgwidth, imgheight = im.size
+    factor = 3
+    if (imgheight * 4 * frames != imgwidth):
+        print('Error, not a good ratio')
+        return
+
+    imcopy = im.copy()
+    imright = imcopy.crop((imgwidth/2, 0, imgwidth, imgheight))
+    imleft = imcopy.crop((0, 0, imgwidth/2, imgheight))
+
+    framesList = []
+    for index in range(0,frames*2,2):
+        w = int(imgwidth/(2 * frames))
+        imleft = imcopy.crop((index * w, 0, (index + 1) * w, imgheight))
+        imleft.save('debug/debug_left_' + str(index) + '.png')
+        imright = imcopy.crop(((index + 1) * w, 0, (index + 2) * w, imgheight))
+        imright.save('debug/debug_right_' + str(index) + '.png')
+        framesList.append(treatFrame(index, factor, background, imleft, imright))
+    saveResult(framesList)
 
 def fixPixels(image, control):
     pix = image.load()
 
     pixControl = control.load()
+
     controlWidth, controlHeight = control.size  # Get the width and hight of the image for iterating over
     badPix = []
     for x in range(controlWidth):
@@ -225,15 +238,14 @@ def fixPixels(image, control):
             if (pix[x,y][3] != pixControl[x,y][3]):
                 badPix.append((x,y))
 
-
     for px in badPix:
         fixed = False
         for x in range(px[0]-1, px[0]+2, 1):
-            if (x > controlWidth):
-                break
+            if (x >= controlWidth or x < 0):
+                continue
             for y in range(px[1]-1, px[1]+2, 1):
-                if (x > controlHeight):
-                    break
+                if (y >= controlHeight or x < 0):
+                    continue
                 if (pix[x, y][3] != 0):
                     pix[px[0], px[1]] = pix[x, y]
                     fixed = True
@@ -243,14 +255,14 @@ def fixPixels(image, control):
 
     return image
 
-def saveResult(imgs, width):
-    imgwidth, imgheight = imgs[0].size
+def saveResult(frames):
+    imgwidth, imgheight = frames[0][0].size
 
-    resultFinal = Image.new('RGBA', (imgwidth, 1 + len(imgs) * (imgheight + 1)))
-    imgwidth3, imgheight3 = resultFinal.size
+    resultFinal = Image.new('RGBA', (len(frames) * imgwidth, 1 + len(frames[0]) * (imgheight + 1)))
 
-    for i, img in enumerate(imgs):
-        resultFinal.paste(img, (0, 1 + i*(imgheight + 1)), img)
+    for index,frame in enumerate(frames):
+        for i, img in enumerate(frame):
+            resultFinal.paste(img, (index * imgwidth, 1 + i*(imgheight + 1)), img)
 
     resultFinal.save("final.png")
 
@@ -285,7 +297,6 @@ def getPixels(img, coords, offset, debug):
     if debug:
         ImageDraw.Draw(debug).polygon(coords, outline=(255,255,255,255), fill=0)
     mask = np.array(maskIm)
-    maskIm.save('mask.png')
     newImArray = np.empty(imArray.shape,dtype='uint8')
 
     newImArray[:,:,:3] = imArray[:,:,:3]
@@ -316,4 +327,4 @@ def pasteBackground(img, background):
     bgcopy.paste(img, (0,0), img)
     return bgcopy
 
-treatImage("entry.png", "background.png")
+treatImage("entry.png", "background.png", 3)
