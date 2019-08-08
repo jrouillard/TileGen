@@ -16,15 +16,13 @@ def treatImage(path, bg):
         print('Error, width is not 4 times height')
         return
 
-    isMultipleOf3 = True
-    if (imgheight%3 != 0 or imgwidth%3 != 0):
-        isMultipleOf3 = False
 
     imcopy = im.copy()
     imright = imcopy.crop((imgwidth/2, 0, imgwidth, imgheight))
     imleft = imcopy.crop((0, 0, imgwidth/2, imgheight))
-    imleft = imleft.resize((int(imgwidth/2 * 3), imgheight*3),resample=0 )
-    imright = imright.resize((int(imgwidth/2 * 3), imgheight*3),resample=0 )
+    control = imleft.copy()
+    imleft = imleft.resize((int(imgwidth/2 * factor), imgheight * factor),resample=0 )
+    imright = imright.resize((int(imgwidth/2 * factor), imgheight * factor),resample=0 )
     imcropwidth, imcropheight = imright.size
     size = (imcropwidth, imcropheight)
     debug = imleft.copy()
@@ -47,7 +45,6 @@ def treatImage(path, bg):
       (round(0.5 * imcropwidth), round(imcropheight * 2/6)   ), # 14
       (round(2/6 * imcropwidth), round(imcropheight * 0.5)  ), # 15
     ]
-    print(coord)
     square1 = [
         (coord[6][0], coord[6][1]),
         (coord[5][0], coord[5][1]),
@@ -139,7 +136,6 @@ def treatImage(path, bg):
         (square9[3][0], square9[0][1]),
     ]
 
-    print(positionsbbox)
     ls1 = getPixels(imleft, square1, False, debug)
     ls2 = getPixels(imleft, square2withoffset, (0, -1), debug)
     ls3 = getPixels(imleft, square3, False, debug)
@@ -214,21 +210,48 @@ def treatImage(path, bg):
     debug.save("debug.png")
     resultImgs = []
     for direction in allDirections:
-        resultImgs.append(pasteBackground(createSquare(direction, size, positionsbbox, factor), background))
+        resultImgs.append(pasteBackground(fixPixels(createSquare(direction, size, positionsbbox, factor), control), background))
 
     saveResult(resultImgs, size[0])
 
+def fixPixels(image, control):
+    pix = image.load()
+
+    pixControl = control.load()
+    controlWidth, controlHeight = control.size  # Get the width and hight of the image for iterating over
+    badPix = []
+    for x in range(controlWidth):
+        for y in range(controlHeight):
+            if (pix[x,y][3] != pixControl[x,y][3]):
+                badPix.append((x,y))
+
+
+    for px in badPix:
+        fixed = False
+        for x in range(px[0]-1, px[0]+2, 1):
+            if (x > controlWidth):
+                break
+            for y in range(px[1]-1, px[1]+2, 1):
+                if (x > controlHeight):
+                    break
+                if (pix[x, y][3] != 0):
+                    pix[px[0], px[1]] = pix[x, y]
+                    fixed = True
+                    break
+            if (fixed):
+                break
+
+    return image
+
 def saveResult(imgs, width):
     imgwidth, imgheight = imgs[0].size
-    print(imgwidth)
-    resultFinal = Image.new('RGBA', (width, 1 + len(imgs) * (imgheight + 1)))
+
+    resultFinal = Image.new('RGBA', (imgwidth, 1 + len(imgs) * (imgheight + 1)))
+    imgwidth3, imgheight3 = resultFinal.size
+
     for i, img in enumerate(imgs):
-        resultFinal.paste(img, (0,1 + i*(imgheight + 1)), img)
+        resultFinal.paste(img, (0, 1 + i*(imgheight + 1)), img)
 
-    bbox = resultFinal.convert("RGBa").getbbox()
-
-    print(bbox)
-    resultFinal = resultFinal.crop(bbox)
     resultFinal.save("final.png")
 
 def createSquare(squares, size, positionsbbox, factor):
@@ -287,11 +310,10 @@ def getPixels(img, coords, offset, debug):
     offset = offset if offset else (0,0)
     return PixelLosange(result, bbox, offset)
 
-def pasteBackground(finalImg, background):
-    # return finalImg
+def pasteBackground(img, background):
     bgwidth, bgheight = background.size
     bgcopy = background.copy()
-    bgcopy.paste(finalImg, (0,0), finalImg)
+    bgcopy.paste(img, (0,0), img)
     return bgcopy
 
 treatImage("entry.png", "background.png")
