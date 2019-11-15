@@ -255,11 +255,11 @@ def fixPixels(image, control):
 def saveResult(frames):
     imgwidth, imgheight = frames[0][0].size
 
-    resultFinal = Image.new('RGBA', (len(frames) * imgwidth, 1 + len(frames[0]) * (imgheight + 1)))
+    resultFinal = Image.new('RGBA', (len(frames) * imgwidth,len(frames[0]) * (imgheight)))
 
     for index,frame in enumerate(frames):
         for i, img in enumerate(frame):
-            resultFinal.paste(img, (index * imgwidth, 1 + i*(imgheight + 1)), img)
+            resultFinal.paste(img, (index * imgwidth, i*(imgheight)), img)
 
     resultFinal.save("atlas.png")
 
