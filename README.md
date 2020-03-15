@@ -16,12 +16,14 @@ Works with any size as long as you respect the 2:1 ratio
 ## How to install
 
 You will need python 3, and the Pillow imaging library for python and numpy
+And pyside2 
 
 to install those packages:
 
 ```
   pip install Pillow
   pip install numpy
+  pip install PySide2
 ```
 
 ## How to run
