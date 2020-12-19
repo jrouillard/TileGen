@@ -15,7 +15,7 @@ Result example (it actually generates a vertical atlas, but for readibility purp
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/example_result.png?raw=true">
 
 Works with any size as long as you respect the 2:1 ratio 
-(it's better if the entry file width is divisible by 3, or else the tool will "fill" some pixels with the content of its neighbors for edge cases)
+(it's better if the entry tile width is divisible by 3, or else the tool will "fill" some pixels with the content of its neighbors for edge cases)
 
 
 ## How to install
