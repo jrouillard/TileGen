@@ -8,7 +8,7 @@ Entry.png:
 
 Result:
 
-<img src="https://github.com/jrouillard/TileGen/blob/master/doc/example_result.png.png?raw=true">
+<img src="https://github.com/jrouillard/TileGen/blob/master/doc/example_result.png?raw=true">
 
 Works with any size as long as you respect the 2:1 ratio 
 (it's better if the entry file width is divisible by 3)
