@@ -8,7 +8,7 @@ Entry.png:
 
 Result:
 
-<img src="https://github.com/jrouillard/TileGen/blob/master/result.png?raw=true" width=400>
+<img src="https://github.com/jrouillard/TileGen/blob/master/result.png?raw=true" width=300>
 
 Works with any size as long as you respect the 2:1 ratio 
 (it's better if the entry file width is divisible by 3)
@@ -31,7 +31,9 @@ to install those packages:
   
   flags:
     - entry: file to treat (default: "entry.png") 
+    
     - background: set a background to all result (for isometric tiles requiring height, optional)
+    
     - frames: set a background to all result (for isometric tiles requiring height, optional)
 
 ```
