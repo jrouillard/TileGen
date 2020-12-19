@@ -1,6 +1,6 @@
 
 """
-A simple eisometric tile generator
+A simple isometric tile generator
 """
 
 
