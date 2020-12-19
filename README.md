@@ -30,7 +30,8 @@ to install those packages:
 ## How to run
   
   flags:
-    - entry: file to treat (default: "entry.png") 
+  
+    - entry: entry file (default: "entry.png") 
     
     - background: set a background to all result (for isometric tiles requiring height, optional)
     
