@@ -199,7 +199,7 @@ def treat_frame(factor, background, imleft, imright):
         [ls5, ls5, ls5, ls5, ls5, ls5, ls5, ls5, ls5],
         [ls1, ls2, ls3, ls4, ls5, ls6, ls7, ls8, ls9],
     ]
-    debug.save("debug.png")
+    # debug.save("debug.png")
     result_imgs = []
     for direction in all_directions:
         result_imgs.append(
@@ -367,7 +367,9 @@ def paste_background(img, background):
 
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser()
+    PARSER.add_argument("-e", "--entry", default="entry.png", help="entry file")
     PARSER.add_argument("-f", "--frames", default=1, help="number of frames")
+    PARSER.add_argument("-b", "--background", default=None, help="set a background for tiles that require height")
     ARGS = PARSER.parse_args()
-    framesTreated, _, _, _ = treat_image("entry.png", "background.png", int(ARGS.frames))
+    framesTreated, _, _, _ = treat_image(ARGS.entry, ARGS.background, int(ARGS.frames))
     save_result(framesTreated, "result.png")
