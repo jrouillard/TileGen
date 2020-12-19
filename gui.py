@@ -36,7 +36,7 @@ class MainWindowWidget(QtWidgets.QWidget):
         self.timer =  QtCore.QTimer(self)
         self.connect(self.timer, QtCore.SIGNAL("timeout()"), self.update)
         script_dir = os.path.dirname(os.path.realpath(__file__))
-        self.setWindowIcon(QtGui.QIcon(script_dir + os.path.sep + 'logo.png'))
+        self.setWindowIcon(QtGui.QIcon(script_dir + os.path.sep + 'images' + os.path.sep + 'logo.png'))
         
         # Image viewing region
         self.main_render = QtWidgets.QLabel(self)
@@ -141,14 +141,14 @@ class MainWindowWidget(QtWidgets.QWidget):
         """
         self.tb = QtWidgets.QToolBar(self)
         
-        self.saveAction = QtWidgets.QAction(QtGui.QIcon('error.png'), '&Save', self)
-        self.saveAction.setShortcut('Ctrl+S')
-        self.saveAction.setStatusTip('Save file')
+        self.saveAction = QtWidgets.QAction(QtGui.QIcon("images" + os.path.sep +"error.png"), "&Save", self)
+        self.saveAction.setShortcut("Ctrl+S")
+        self.saveAction.setStatusTip("Save file")
         self.saveAction.triggered.connect(self.save_image)
 
-        self.clearAction = QtWidgets.QAction(QtGui.QIcon('cancel.png'), '&Clear', self)
-        self.clearAction.setShortcut('Ctrl+W')
-        self.clearAction.setStatusTip('Clear')
+        self.clearAction = QtWidgets.QAction(QtGui.QIcon("images" + os.path.sep +"cancel.png"), "&Clear", self)
+        self.clearAction.setShortcut("Ctrl+W")
+        self.clearAction.setStatusTip("Clear")
         self.clearAction.triggered.connect(self.clear)
 
         self.tb.setAutoFillBackground(True)
@@ -156,7 +156,7 @@ class MainWindowWidget(QtWidgets.QWidget):
         self.tb.setStyleSheet("#tb {background-color:rgb(40, 45, 50); color: white;border-bottom: 1px solid black;}") 
         self.tb.addAction(self.saveAction)
         self.tb.addAction(self.clearAction)
-        self.labelerror = QtWidgets.QLabel('To start, load a tile', self.tb)
+        self.labelerror = QtWidgets.QLabel("To start, load a tile", self.tb)
         self.labelerror.setObjectName("labelerror")
         self.labelerror.setStyleSheet("#labelerror { color: white;}") 
         self.tb.addWidget(self.labelerror)
@@ -167,7 +167,7 @@ class MainWindowWidget(QtWidgets.QWidget):
         :return:
         """
         self.timer.stop()
-        pixmap = QtGui.QPixmap("drop.png")
+        pixmap = QtGui.QPixmap("images" + os.path.sep + "drop.png")
         pixmap = pixmap.scaled(314, 278, QtCore.Qt.KeepAspectRatio)
         self.main_render.setPixmap(pixmap)
         self.label_load.setPixmap(QtGui.QPixmap())
@@ -183,7 +183,7 @@ class MainWindowWidget(QtWidgets.QWidget):
         :return:
         """
         
-        self.fname, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file')
+        self.fname, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open file")
         print(self.fname)
         if self.fname is not None and self.fname != "":
             self.load_image()
@@ -194,7 +194,7 @@ class MainWindowWidget(QtWidgets.QWidget):
         :return:
         """
         
-        self.fbgname, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file')
+        self.fbgname, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Open file")
         if self.fbgname is not None and self.fbgname != "":
             pixmap = QtGui.QPixmap(self.fbgname)
             pixmap = pixmap.scaled(116, 93, QtCore.Qt.KeepAspectRatio)
@@ -210,7 +210,7 @@ class MainWindowWidget(QtWidgets.QWidget):
 
         if not self.result:
             return            
-        savefilename, _ = QtWidgets.QFileDialog.getSaveFileName(self, 'Save file', "atlas.png")
+        savefilename, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Save file",  "images" + os.path.sep + "atlas.png")
         tile_gen.save_result(self.result, savefilename)
 
 
@@ -236,7 +236,7 @@ class MainWindowWidget(QtWidgets.QWidget):
 
         self.labelerror.setText("")
 
-        self.saveAction.setIcon(QtGui.QIcon("save.png"))
+        self.saveAction.setIcon(QtGui.QIcon("images" + os.path.sep + "save.png"))
         self.clearButtonStyle()
         self.loadUI()
         
@@ -246,19 +246,19 @@ class MainWindowWidget(QtWidgets.QWidget):
             demo_images = tile_gen.create_demo_images(self.result, frames, bg, size, (int(345/2), int(280/2)))
         except ValueError as e:
             self.labelerror.setText(str(e))
-            pixmaperror = QtGui.QPixmap("error.png")
-            self.saveAction.setIcon(QtGui.QIcon("error.png"))
+            pixmaperror = QtGui.QPixmap("images" + os.path.sep + "error.png")
+            self.saveAction.setIcon(QtGui.QIcon("images" + os.path.sep + "error.png"))
             self.label_load_background.setPixmap(pixmaperror)
             self.label_load_background.setStyleSheet("#btnbg {background-color:rgb(183, 88, 94);}") 
             return       
         except Exception as e:
             print(e)
             self.labelerror.setText(str(e))
-            pixmaperror = QtGui.QPixmap("error.png")
+            pixmaperror = QtGui.QPixmap("images" + os.path.sep + "error.png")
             self.label_load.setPixmap(pixmaperror)
             self.label_load.setStyleSheet("#btn {background-color:rgb(183, 88, 94);}")
             self.main_render.setPixmap(pixmaperror)
-            self.saveAction.setIcon(QtGui.QIcon("error.png"))
+            self.saveAction.setIcon(QtGui.QIcon("images" + os.path.sep + "error.png"))
             self.main_render.setStyleSheet("#main {border-right: 1px solid #2d2d2d; background-color:rgb(183, 88, 94);}") 
             return 
         
