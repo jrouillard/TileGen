@@ -56,11 +56,11 @@ You can run the program with an ui:
 
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/example.png?raw=true">
 
-gif of usage:
+example:
 
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/tuto.gif?raw=true">
 
-If you want to use frames for animated tiles, you need an entry in that format (for 4 frames for instance):
+If you want to use frames for animated tiles, you need an entry in this format (for 4 frames for instance):
 
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/frames.png?raw=true" width=200>
 
