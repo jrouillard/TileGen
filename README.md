@@ -1,17 +1,21 @@
 # TileGen
-Isometric tileset generator 
+
+TileGen is an isometric tiles generator. Its purpose is to ease the creation of the 48 tiles in the bitmasking method, described here:
+https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673
+
+You give 2 states-tiles and the tool will generate all the possible combinations between them.
 
 Entry.png:
 
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/entry_example.png?raw=true">
 
 
-Result:
+Result example (it actually generates a vertical atlas, but for readibility purposes here is an example of the tiles generated):
 
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/example_result.png?raw=true">
 
 Works with any size as long as you respect the 2:1 ratio 
-(it's better if the entry file width is divisible by 3)
+(it's better if the entry file width is divisible by 3, or else the tool will "fill" some pixels with the content of its neighbors for edge cases)
 
 
 ## How to install
