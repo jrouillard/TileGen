@@ -39,7 +39,7 @@ to install those packages:
     
     - background: set a background to all result (for isometric tiles requiring height, optional)
     
-    - frames: set a background to all result (for isometric tiles requiring height, optional)
+    - frames: set the number of frames
 
 ```
   python ./tileGen.py --entry entry.png --background background.png --frames 1
