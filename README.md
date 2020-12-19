@@ -42,7 +42,7 @@ to install those packages:
     - frames: set the number of frames
 
 ```
-  python ./tileGen.py --entry entry.png --background background.png --frames 1
+  python ./tile_gen.py --entry entry.png --background background.png --frames 1
 ```
 
 ## GUI
