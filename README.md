@@ -13,7 +13,7 @@ input.png:
 
 Atlas result: (I cropped it because 48 would be too big for the readme):
 
-<img src="https://github.com/jrouillard/TileGen/blob/master/doc/atlas_example.png.png?raw=true">
+<img src="https://github.com/jrouillard/TileGen/blob/master/doc/atlas_example.png?raw=true">
 
 
 Result in a map (in the gui preview):
