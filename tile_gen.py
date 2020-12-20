@@ -367,9 +367,10 @@ def paste_background(img, background):
 
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser()
-    PARSER.add_argument("-e", "--entry", default="entry.png", help="entry file")
+    PARSER.add_argument("-e", "--input", default="input.png", help="input file")
+    PARSER.add_argument("-o", "--output", default="result.png", help="output file")
     PARSER.add_argument("-f", "--frames", default=1, help="number of frames")
     PARSER.add_argument("-b", "--background", default=None, help="set a background for tiles that require height")
     ARGS = PARSER.parse_args()
-    framesTreated, _, _, _ = treat_image(ARGS.entry, ARGS.background, int(ARGS.frames))
-    save_result(framesTreated, "result.png")
+    framesTreated, _, _, _ = treat_image(ARGS.input, ARGS.background, int(ARGS.frames))
+    save_result(framesTreated, ARGS.output)
