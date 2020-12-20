@@ -1,6 +1,7 @@
 # TileGen
 
 TileGen is an isometric tiles generator. Its purpose is to ease the creation of the 48 tiles in the bitmasking method, described here:
+
 https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673
 
 You give 2 states-tiles and the tool will generate all the possible combinations between them.
@@ -10,7 +11,12 @@ input.png:
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/entry_example.png?raw=true">
 
 
-Result example (it actually generates a vertical atlas, but for readibility purposes here is an example of the tiles generated):
+Atlas result: (I cropped it because 48 would be too big for the readme):
+
+<img src="https://github.com/jrouillard/TileGen/blob/master/doc/atlas_example.png.png?raw=true">
+
+
+Result in a map (in the gui preview):
 
 <img src="https://github.com/jrouillard/TileGen/blob/master/doc/example_result.png?raw=true">
 
@@ -26,9 +32,7 @@ And pyside2
 to install those packages:
 
 ```
-  pip install Pillow
-  pip install numpy
-  pip install PySide2
+  pip install Pillow numpy PySide2
 ```
 
 ## How to run
